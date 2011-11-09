@@ -8,6 +8,10 @@ It's for IRC specifically.
 
 # Usage
 
-cp run.example run
+    cp run.example run
+
 and change the env var accordingly
-run by ./run
+
+run by
+
+    ./run
