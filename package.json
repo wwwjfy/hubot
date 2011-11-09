@@ -17,7 +17,8 @@
   "dependencies": {
     "coffee-script": "1.1.2",
     "optparse": "1.0.3",
-    "scoped-http-client": "0.9.4"
+    "scoped-http-client": "0.9.4",
+    "irc": "0.3.2"
   },
 
   "main": "./index",

@@ -34,6 +34,7 @@ class IrcBot extends Robot.Adapter
       server:   process.env.HUBOT_IRC_SERVER
       password: process.env.HUBOT_IRC_PASSWORD
       nickpass: process.env.HUBOT_IRC_NICKSERV_PASSWORD
+      usessl:   process.env.HUBOT_IRC_SERVER_USE_SSL or false
       fakessl:  process.env.HUBOT_IRC_SERVER_FAKE_SSL or false
       unflood:  process.env.HUBOT_IRC_UNFLOOD or false
       debug:    process.env.HUBOT_IRC_DEBUG or false
@@ -43,7 +44,7 @@ class IrcBot extends Robot.Adapter
       debug: options.debug,
       port: options.port,
       stripColors: true,
-      secure: if options.port is "6697" then true else false,
+      secure: if options.usessl then true else if options.port is "6697" then true else false,
       selfSigned: options.fakessl,
       floodProtection: options.unflood
 
