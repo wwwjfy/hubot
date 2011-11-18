@@ -191,6 +191,16 @@ class Robot
           
     matchedUsers
 
+  usersForGroup: (group) ->
+    matchedUsers = []
+
+    users = @users()
+    for id, user of users
+      for _, g of user['groups']
+        if g == group
+          matchedUsers.push user['name']
+    matchedUsers
+
   run: ->
     @adapter.run()
 
@@ -261,6 +271,10 @@ class Robot.Adapter
   #
   usersForFuzzyName: (fuzzyName) ->
     @robot.usersForFuzzyName fuzzyName
+
+  # Public: Get all users in group
+  usersForGroup: (group) ->
+    @robot.usersForGroup group
 
   # Public: Creates a scoped http client with chainable methods for
   # modifying the request.  This doesn't actually make a request though.
