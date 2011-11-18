@@ -119,7 +119,7 @@ class Robot
   # Returns nothing.
   loadAdapter: (path, adapter) ->
     try
-      path = if adapter in [ "campfire", "shell" ]
+      path = if adapter in [ "campfire", "shell", "irc" ]
         "#{path}/#{adapter}"
       else
         "hubot-#{adapter}"
