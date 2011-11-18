@@ -1,6 +1,7 @@
 # Hubot
 
-This is a version of GitHub's Campfire bot, hubot. He's pretty cool.
+This is a version of GitHub's Campfire bot, hubot. He's <s>pretty<s> really
+cool.
 
 It's a fork of the origin repo: https://github.com/github/hubot
 

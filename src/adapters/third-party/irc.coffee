@@ -34,10 +34,10 @@ class IrcBot extends Robot.Adapter
       server:   process.env.HUBOT_IRC_SERVER
       password: process.env.HUBOT_IRC_PASSWORD
       nickpass: process.env.HUBOT_IRC_NICKSERV_PASSWORD
-      usessl:   process.env.HUBOT_IRC_SERVER_USE_SSL or false
-      fakessl:  process.env.HUBOT_IRC_SERVER_FAKE_SSL or false
-      unflood:  process.env.HUBOT_IRC_UNFLOOD or false
-      debug:    process.env.HUBOT_IRC_DEBUG or false
+      usessl:   !!process.env.HUBOT_IRC_SERVER_USE_SSL or false
+      fakessl:  !!process.env.HUBOT_IRC_SERVER_FAKE_SSL or false
+      unflood:  !!process.env.HUBOT_IRC_UNFLOOD or false
+      debug:    !!process.env.HUBOT_IRC_DEBUG or false
 
     client_options =
       password: options.password,
@@ -60,7 +60,7 @@ class IrcBot extends Robot.Adapter
       bot.addListener 'notice', (from, to, text) ->
         if from is 'NickServ' and text.indexOf('registered') isnt -1
           bot.say 'NickServ', "identify #{options.nickpass}"
-        else if options.nickpass and from is 'NickServ' and text.indexOf('now identified') isnt -1
+        else if options.nickpass and from is 'NickServ' and text.indexOf('Password accepted') isnt -1
           for room in options.rooms
             @join room
 
