@@ -1,5 +1,6 @@
-Robot = require "../robot"
-Irc   = require "irc"
+Robot = require('hubot').robot()
+
+Irc   = require 'irc'
 
 class IrcBot extends Robot.Adapter
   send: (user, strings...) ->
@@ -34,10 +35,10 @@ class IrcBot extends Robot.Adapter
       server:   process.env.HUBOT_IRC_SERVER
       password: process.env.HUBOT_IRC_PASSWORD
       nickpass: process.env.HUBOT_IRC_NICKSERV_PASSWORD
-      usessl:   !!process.env.HUBOT_IRC_SERVER_USE_SSL or false
-      fakessl:  !!process.env.HUBOT_IRC_SERVER_FAKE_SSL or false
-      unflood:  !!process.env.HUBOT_IRC_UNFLOOD or false
-      debug:    !!process.env.HUBOT_IRC_DEBUG or false
+      fakessl:  process.env.HUBOT_IRC_SERVER_FAKE_SSL?
+      unflood:  process.env.HUBOT_IRC_UNFLOOD?
+      debug:    process.env.HUBOT_IRC_DEBUG?
+      usessl:   process.env.HUBOT_IRC_USESSL?
 
     client_options =
       password: options.password,
@@ -48,8 +49,7 @@ class IrcBot extends Robot.Adapter
       selfSigned: options.fakessl,
       floodProtection: options.unflood
 
-    unless options.nickpass
-        client_options['channels'] = options.rooms
+    client_options['channels'] = options.rooms unless options.nickpass
 
     bot = new Irc.Client options.server, options.nick, client_options
 
@@ -103,5 +103,6 @@ class IrcBot extends Robot.Adapter
 
     @bot = bot
 
-module.exports = IrcBot
+exports.use = (robot) ->
+  new IrcBot robot
 
