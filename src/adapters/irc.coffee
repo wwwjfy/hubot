@@ -25,15 +25,16 @@ class IrcBot extends Robot.Adapter
         @say(user.name, str)
 
   say: (to, str) ->
-    while true
-      if str.length > 400
-        pos = str.lastIndexOf(' ', 400)
-        s = str.substring(0, pos)
-        str = str.substring(pos)
-        @bot.say(to, s)
-      else
-        @bot.say(to, str)
-        break
+    for s1 in str.split(/\r?\n/)
+      while true
+        if s1.length > 400
+          pos = s1.lastIndexOf(' ', 400)
+          s = s1.substring(0, pos)
+          s1 = s1.substring(pos+1)
+          @bot.say(to, s)
+        else
+          @bot.say(to, s1)
+          break
 
   reply: (user, strings...) ->
     for str in strings
