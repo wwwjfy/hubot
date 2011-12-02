@@ -10,7 +10,7 @@ module.exports = (robot) ->
 
     matchedUsers = robot.usersForGroup group
 
-    if matchedUsers
+    if matchedUsers.length > 0
       msg.send matchedUsers.join(", ") + ": " + notification
     else
       msg.send msg.message.user.name + ": no such group"
