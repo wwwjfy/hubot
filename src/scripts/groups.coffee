@@ -5,7 +5,7 @@
 # who are in <group> - see who are in <group>
 
 module.exports = (robot) ->
-  robot.respond /who are in ([\w.-_]+)\?*$/i, (msg) ->
+  robot.respond /who are in ([\w.\-_]+)\?*$/i, (msg) ->
     group = msg.match[1]
 
     matchedUsers = robot.usersForGroup group
@@ -17,7 +17,7 @@ module.exports = (robot) ->
     else
       msg.send "no one in group " + group
 
-  robot.respond /([\w.-_]+) is in (["'\w:-_]+)[.!]*$/i, (msg) ->
+  robot.respond /([\w.\-_]+) is in (["'\w:\-_]+)[.!]*$/i, (msg) ->
     name = msg.match[1]
     newGroup = msg.match[2].trim()
 
@@ -33,7 +33,7 @@ module.exports = (robot) ->
       else
         msg.send "I don't know anything about #{name}."
 
-  robot.respond /([\w.-_]+) is not in (["'\w:-_]+)[.!]*$/i, (msg) ->
+  robot.respond /([\w.\-_]+) is not in (["'\w:\-_]+)[.!]*$/i, (msg) ->
     name = msg.match[1]
     newGroup = msg.match[2].trim()
 
