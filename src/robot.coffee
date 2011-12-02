@@ -454,6 +454,16 @@ class Robot.Response
   send: (strings...) ->
     @robot.adapter.send @message.user, strings...
 
+  # Public: Posts a message back to the chat source in a specified room
+  #
+  # room - The room which the post will go to
+  # strings - One or more strings to be posted.  The order of these strings
+  #           should be kept intact.
+  #
+  # Returns nothing.
+  sendToRoom: (room, strings...) ->
+    @robot.adapter.sendToRoom room, strings...
+
   # Public: Posts a topic changing message
   #
   # strings - One or more strings to set as the topic of the

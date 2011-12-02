@@ -10,6 +10,11 @@ class IrcBot extends Robot.Adapter
         users.push(user)
     users
 
+  sendToRoom: (room, strings...) ->
+    for str in strings
+      console.log "#{room} #{str}"
+      @say(room, str)
+
   send: (user, strings...) ->
     for str in strings
       if user.room
