@@ -6,20 +6,6 @@ module.exports = (robot) ->
   info   = Url.parse process.env.REDISTOGO_URL || 'redis://localhost:6379'
   client = Redis.createClient(info.port, info.hostname)
 
-  robot.adapter.bot.addListener 'join', (channel, who) ->
-    unless robot.userForName who
-      client.incr 'hubot:user_id', (err, result) ->
-        if !err
-          user_id = result
-        else
-          console.log 'error INCR user_id: ' + err
-        robot.userForId user_id, {'name': who}
-
-  client.get 'hubot:user_id', (err, result) ->
-    unless err
-      unless result
-        client.set 'hubot:user_id', 0
-
   if info.auth
     client.auth info.auth.split(":")[1]
 
