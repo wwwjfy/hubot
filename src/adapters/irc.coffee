@@ -2,6 +2,14 @@ Robot = require '../robot'
 Irc = require 'irc'
 
 class IrcBot extends Robot.Adapter
+  nicklist: (room) ->
+    roominfo = @bot.chans[room]
+    users = []
+    if roominfo
+      for user of roominfo.users
+        users.push(user)
+    users
+
   send: (user, strings...) ->
     for str in strings
       if user.room

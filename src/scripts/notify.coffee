@@ -1,4 +1,4 @@
-# Notify anything people in group
+# Notify anything to people in group
 #
 # notify <group> bla bla - notify people in group anything
 # n <group> bla bla - notify people in group anything
