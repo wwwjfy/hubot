@@ -6,10 +6,21 @@ class IrcBot extends Robot.Adapter
     for str in strings
       if user.room
         console.log "#{user.room} #{str}"
-        @bot.say(user.room, str)
+        @say(user.room, str)
       else
         console.log "#{user.name} #{str}"
-        @bot.say(user.name, str)
+        @say(user.name, str)
+
+  say: (to, str) ->
+    while true
+      if str.length > 400
+        pos = str.lastIndexOf(' ', 400)
+        s = str.substring(0, pos)
+        str = str.substring(pos)
+        @bot.say(to, s)
+      else
+        @bot.say(to, str)
+        break
 
   reply: (user, strings...) ->
     for str in strings
