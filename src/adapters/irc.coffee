@@ -130,4 +130,3 @@ class IrcBot extends Robot.Adapter
 
 exports.use = (robot) ->
   new IrcBot robot
-
