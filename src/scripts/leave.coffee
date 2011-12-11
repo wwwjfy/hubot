@@ -2,7 +2,7 @@
 #
 # leave - let the robot leave the room
 module.exports = (robot) ->
-  robot.respond /leave$/, (msg) ->
+  robot.respond /leave$/i, (msg) ->
     if msg.message.user.room?
       msg.send "Bye~"
       robot.adapter.bot.part(msg.message.user.room)

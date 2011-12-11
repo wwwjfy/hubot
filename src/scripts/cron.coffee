@@ -77,7 +77,7 @@ module.exports = (robot) ->
   cron = new Cron robot
   cron.run()
 
-  robot.respond /schedule at ([0-9]{1,2}):([0-9]{1,2}) (once|every weekday|everyday) (.*)$/, (msg) ->
+  robot.respond /schedule at ([0-9]{1,2}):([0-9]{1,2}) (once|every weekday|everyday) (.*)$/i, (msg) ->
     hour = parseInt msg.match[1]
     min = parseInt msg.match[2]
     date = msg.match[3]
@@ -95,11 +95,11 @@ module.exports = (robot) ->
 
     msg.send "Got it and it's already in my mind. Repeat it again: " + cron.getJobDesc job
 
-  robot.respond /show schedules/, (msg) ->
+  robot.respond /show schedules/i, (msg) ->
     for job in cron.getJobs()
       msg.send job.id + ': ' + cron.getJobDesc job
 
-  robot.respond /cancel schedule ([0-9]+)$/, (msg) ->
+  robot.respond /cancel schedule ([0-9]+)$/i, (msg) ->
     if false == cron.cancel parseInt msg.match[1]
       msg.send msg.message.user.name "Hey, stop kidding me. I don't remember that."
     else

@@ -9,7 +9,7 @@ module.exports = (robot) ->
     for room in robot.brain.data.autojoin
       robot.adapter.join room
 
-  robot.respond /autojoin (#\S*)$/, (msg) ->
+  robot.respond /autojoin (#\S*)$/i, (msg) ->
     room = msg.match[1]
     if !(room in robot.brain.data.autojoin)
       robot.brain.data.autojoin.push room
@@ -17,13 +17,13 @@ module.exports = (robot) ->
     else
       msg.send "I know, I know, stop being annoying"
 
-  robot.respond /show autojoin$/, (msg) ->
-    if robot.brain.data.autojoin
+  robot.respond /show autojoin$/i, (msg) ->
+    if robot.brain.data.autojoin.length > 0
       msg.send "I'll automatically join " + robot.brain.data.autojoin.join(", ")
     else
-      msg.send "No, I won't join any"
+      msg.send "No, I won't auto join any"
 
-  robot.respond /remove autojoin (#\S*)$/, (msg) ->
+  robot.respond /remove autojoin (#\S*)$/i, (msg) ->
     room = msg.match[1]
     autojoin = robot.brain.data.autojoin
     if room in autojoin
