@@ -1,3 +1,9 @@
+# Cron job
+#
+# schedule at 10:30 every weekday/everyday <command> - ask the bot to execute <command> at 10:30 every weekday or everyday
+# show schedules - show schedules with id and description
+# cancel schedule <id> - cancel schedule by the id shown in "show schedules"
+
 Redis = require 'redis'
 Robot = require '../robot'
 
@@ -8,6 +14,13 @@ class Cron
     @robot.brain.on 'loaded', =>
       if @robot.brain.data.schedule
         @jobs = @robot.brain.data.schedule
+      @resetJobId()
+
+  resetJobId: ->
+    @jobId = 0
+    for job in @jobs
+      @jobId++
+      job.id = @jobId
 
   run: ->
     @resetTimer()
@@ -35,17 +48,32 @@ class Cron
       @run()
 
   add: (hour, min, date, action, msg) ->
-    job = {'hour': hour, 'min': min, 'date': date, 'action': action, 'user': msg.message.user}
+    @jobId++
+    job = 'hour': hour, 'min': min, 'date': date, 'action': action, 'user': msg.message.user, 'id': @jobId
     @jobs.push job
     @robot.brain.data.schedule = @jobs
+
+  cancel: (jobId) ->
+    for id, job of @jobs
+      if job.id == jobId
+        @jobs.splice(id, 1)
+        @resetJobId
+        return
+    return false
+
+  getJobs: ->
+    @jobs
+
+  getJobDesc: (job) ->
+    job.action + ' at ' + job.hour + ':' + job.min + ' ' + job.date
 
 module.exports = (robot) ->
   cron = new Cron robot
   cron.run()
 
   robot.respond /schedule at ([0-9]{1,2}):([0-9]{1,2}) (every weekday|everyday) (.*)$/, (msg) ->
-    hour = parseInt(msg.match[1])
-    min = parseInt(msg.match[2])
+    hour = parseInt msg.match[1]
+    min = parseInt msg.match[2]
     date = msg.match[3]
     action = msg.match[4]
 
@@ -58,3 +86,15 @@ module.exports = (robot) ->
       return
 
     cron.add(hour, min, date, action, msg)
+
+    msg.send "Got it and it's already in my mind. Repeat it again: " + cron.getJobDesc job
+
+  robot.respond /show schedules/, (msg) ->
+    for job in cron.getJobs()
+      msg.send job.id + ': ' + cron.getJobDesc job
+
+  robot.respond /cancel schedule ([0-9]+)$/, (msg) ->
+    if false == cron.cancel parseInt msg.match[1]
+      msg.send msg.message.user.name "Hey, stop kidding me. I don't remember that."
+    else
+      msg.send "Fine, I've already forgotten it."
