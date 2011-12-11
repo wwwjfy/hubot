@@ -37,9 +37,11 @@ class Cron
     for job in self.jobs
       date = new Date()
       if date.getHours() == job.hour && date.getMinutes() == job.min
-        if job.date == 'every weekday' && (date.getDay() == 0 || date.getDay() == 6)
+        if job.date == "every weekday" && (date.getDay() == 0 || date.getDay() == 6)
           continue
         self.robot.adapter.receive new Robot.TextMessage(job.user, self.robot.name + ': ' + job.action)
+        if job.date == "once"
+          self.cancel job.id
 
   incrCounter: ->
     @counter++
@@ -48,10 +50,12 @@ class Cron
       @run()
 
   add: (hour, min, date, action, msg) ->
+    @resetJobId()
     @jobId++
     job = 'hour': hour, 'min': min, 'date': date, 'action': action, 'user': msg.message.user, 'id': @jobId
     @jobs.push job
     @robot.brain.data.schedule = @jobs
+    job
 
   cancel: (jobId) ->
     for id, job of @jobs
@@ -65,13 +69,15 @@ class Cron
     @jobs
 
   getJobDesc: (job) ->
-    job.action + ' at ' + job.hour + ':' + job.min + ' ' + job.date
+    hour = if job.hour < 9 then "0" + job.hour else job.hour
+    min = if job.min < 9 then "0" + job.min else job.min
+    job.action + ' at ' + hour + ':' + min + ' ' + job.date
 
 module.exports = (robot) ->
   cron = new Cron robot
   cron.run()
 
-  robot.respond /schedule at ([0-9]{1,2}):([0-9]{1,2}) (every weekday|everyday) (.*)$/, (msg) ->
+  robot.respond /schedule at ([0-9]{1,2}):([0-9]{1,2}) (once|every weekday|everyday) (.*)$/, (msg) ->
     hour = parseInt msg.match[1]
     min = parseInt msg.match[2]
     date = msg.match[3]
@@ -85,7 +91,7 @@ module.exports = (robot) ->
       msg.send msg.message.user.name + ": I can only count 0 to 60 as minute.."
       return
 
-    cron.add(hour, min, date, action, msg)
+    job = cron.add(hour, min, date, action, msg)
 
     msg.send "Got it and it's already in my mind. Repeat it again: " + cron.getJobDesc job
 
