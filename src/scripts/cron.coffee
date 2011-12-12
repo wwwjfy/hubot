@@ -96,8 +96,12 @@ module.exports = (robot) ->
     msg.send "Got it and it's already in my mind. Repeat it again: " + cron.getJobDesc job
 
   robot.respond /show schedules/i, (msg) ->
-    for job in cron.getJobs()
-      msg.send job.id + ': ' + cron.getJobDesc job
+    jobs = cron.getJobs()
+    if jobs.length > 0
+      for job in cron.getJobs()
+        msg.send job.id + ': ' + cron.getJobDesc job
+    else
+      msg.send "nothing on my schedule"
 
   robot.respond /cancel schedule ([0-9]+)$/i, (msg) ->
     if false == cron.cancel parseInt msg.match[1]
