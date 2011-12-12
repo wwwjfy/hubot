@@ -1,6 +1,6 @@
 # Cron job
 #
-# schedule at 10:30 every weekday/everyday <command> - ask the bot to execute <command> at 10:30 every weekday or everyday
+# schedule at 10:30 once/every weekday/everyday <command> - ask the bot to execute <command> at 10:30 every weekday or everyday
 # show schedules - show schedules with id and description
 # cancel schedule <id> - cancel schedule by the id shown in "show schedules"
 
