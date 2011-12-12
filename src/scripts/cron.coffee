@@ -61,7 +61,7 @@ class Cron
     for id, job of @jobs
       if job.id == jobId
         @jobs.splice(id, 1)
-        @resetJobId
+        @resetJobId()
         return
     return false
 
