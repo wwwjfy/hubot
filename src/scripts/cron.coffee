@@ -105,6 +105,6 @@ module.exports = (robot) ->
 
   robot.respond /cancel schedule ([0-9]+)$/i, (msg) ->
     if false == cron.cancel parseInt msg.match[1]
-      msg.send msg.message.user.name "Hey, stop kidding me. I don't remember that."
+      msg.send msg.message.user.name + "Hey, stop kidding me. I don't remember that."
     else
       msg.send "Fine, I've already forgotten it."
