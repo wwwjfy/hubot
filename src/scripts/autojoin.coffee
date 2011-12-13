@@ -7,6 +7,7 @@ module.exports = (robot) ->
   robot.adapter.bot.addListener 'motd', (motd) ->
     robot.brain.data.autojoin ?= []
     for room in robot.brain.data.autojoin
+      console.info 'auto joining ' + room
       robot.adapter.join room
 
   robot.respond /autojoin (#\S*)$/i, (msg) ->
