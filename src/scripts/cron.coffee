@@ -78,8 +78,8 @@ module.exports = (robot) ->
   cron.run()
 
   robot.respond /schedule at ([0-9]{1,2}):([0-9]{1,2}) (once|every weekday|everyday) (.*)$/i, (msg) ->
-    hour = parseInt msg.match[1]
-    min = parseInt msg.match[2]
+    hour = parseInt msg.match[1], 10
+    min = parseInt msg.match[2], 10
     date = msg.match[3]
     action = msg.match[4]
 
@@ -111,7 +111,7 @@ module.exports = (robot) ->
       msg.send "nothing on my schedule"
 
   robot.respond /cancel schedule ([0-9]+)$/i, (msg) ->
-    if false == cron.cancel parseInt msg.match[1]
+    if false == cron.cancel parseInt msg.match[1], 10
       msg.send msg.message.user.name + "Hey, stop kidding me. I don't remember that."
     else
       msg.send "Fine, I've already forgotten it."
