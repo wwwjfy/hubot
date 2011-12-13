@@ -21,9 +21,6 @@ module.exports = (robot) ->
     channel = msg.match[2]
     group = msg.match[3]
     notification = msg.match[4]
-    console.info(channel)
-    console.info(group)
-    console.info(notification)
 
     matchedUsers = robot.usersForGroup group
 
