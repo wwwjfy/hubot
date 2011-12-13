@@ -97,8 +97,15 @@ module.exports = (robot) ->
 
   robot.respond /show schedules/i, (msg) ->
     jobs = cron.getJobs()
-    if jobs.length > 0
-      for job in cron.getJobs()
+    shownJobs = []
+    for job in jobs
+      if job.user.room
+        if job.user.room == msg.message.user.room
+          shownJobs.push job
+      else if job.user.name == msg.message.user.name
+        shownJobs.push job
+    if shownJobs.length > 0
+      for job in shownJobs
         msg.send job.id + ': ' + cron.getJobDesc job
     else
       msg.send "nothing on my schedule"
