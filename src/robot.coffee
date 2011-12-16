@@ -82,7 +82,8 @@ class Robot
   receive: (message) ->
     for lst in @listeners
       try
-        lst.call message
+        if lst.call message
+          break
       catch ex
         console.log "error while calling listener: #{ex}"
 
