@@ -109,6 +109,9 @@ class Robot
     ext  = Path.extname file
     full = Path.join path, Path.basename(file, ext)
     if ext is '.coffee' or ext is '.js'
+      origin = Path.join path, file
+      if require.cache[origin]
+        delete require.cache[origin]
       require(full) @
       @parseHelp "#{path}/#{file}"
 
