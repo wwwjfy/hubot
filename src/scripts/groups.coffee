@@ -3,6 +3,7 @@
 # <user> is in <group> - add a user to a group
 # <user> is not in <group> - remove a user from a group
 # who are in <group> - see who are in <group>
+# show groups - show all groups
 
 module.exports = (robot) ->
   robot.respond /who are in ([\w.\-_]+)\?*$/i, (msg) ->
@@ -48,3 +49,12 @@ module.exports = (robot) ->
 
     else
       msg.send "I don't know anything about #{name}."
+
+  robot.respond /show groups/i, (msg) ->
+    groups = []
+    for id, user of robot.users()
+      for g in user.groups
+        if groups.indexOf(g) == -1
+          groups.push g
+
+    msg.send "The groups are: " + groups.join(", ")
