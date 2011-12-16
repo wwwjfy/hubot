@@ -53,8 +53,9 @@ module.exports = (robot) ->
   robot.respond /show groups/i, (msg) ->
     groups = []
     for id, user of robot.users()
-      for g in user.groups
-        if groups.indexOf(g) == -1
-          groups.push g
+      if user.groups
+        for g in user.groups
+          if groups.indexOf(g) == -1
+            groups.push g
 
     msg.send "The groups are: " + groups.join(", ")
