@@ -14,4 +14,4 @@ export HUBOT_IRC_DEBUG=1
 export NODE_PATH=node_modules:$NODE_PATH
 export PATH=node_modules/.bin:$PATH
 
-bin/hubot -a irc
+bin/hubot -a irc -n $HUBOT_IRC_NICK
