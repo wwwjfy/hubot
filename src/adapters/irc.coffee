@@ -24,6 +24,10 @@ class IrcBot extends Robot.Adapter
         console.log "#{user.name} #{str}"
         @say(user.name, str)
 
+  topic: (user,strings...) ->
+    for topic in strings
+      @bot.topic user.room, topic
+
   say: (to, str) ->
     for s1 in str.split(/\r?\n/)
       while true
