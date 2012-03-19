@@ -39,7 +39,7 @@ class Cron
       if date.getHours() == job.hour && date.getMinutes() == job.min
         if job.date == "every weekday" && (date.getDay() == 0 || date.getDay() == 6)
           continue
-        self.robot.adapter.receive new Robot.TextMessage(job.user, self.robot.name + ': ' + job.action)
+        self.robot.adapter.receive new Robot.TextMessage({'name': job.user, 'room': job.room}, self.robot.name + ': ' + job.action)
         if job.date == "once"
           self.cancel job.id
 
@@ -52,7 +52,7 @@ class Cron
   add: (hour, min, date, action, msg) ->
     @resetJobId()
     @jobId++
-    job = 'hour': hour, 'min': min, 'date': date, 'action': action, 'user': msg.message.user, 'id': @jobId
+    job = 'hour': hour, 'min': min, 'date': date, 'action': action, 'user': msg.message.user.name, 'room': msg.message.user.room, 'id': @jobId
     @jobs.push job
     @robot.brain.data.schedule = @jobs
     job
