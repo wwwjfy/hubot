@@ -34,6 +34,7 @@ class Cron
 
   runCronJobs: (self) ->
     self.incrCounter()
+    jobsToCancel = []
     for job in self.jobs
       date = new Date()
       if date.getHours() == job.hour && date.getMinutes() == job.min
@@ -41,7 +42,10 @@ class Cron
           continue
         self.robot.adapter.receive new Robot.TextMessage({'name': job.user, 'room': job.room}, self.robot.name + ': ' + job.action)
         if job.date == "once"
-          self.cancel job.id
+          jobsToCancel.push job.id
+    if jobsToCancel.length > 0
+      for jobId in jobsToCancel
+        self.cancel jobId
 
   incrCounter: ->
     @counter++
@@ -99,8 +103,8 @@ module.exports = (robot) ->
     jobs = cron.getJobs()
     shownJobs = []
     for job in jobs
-      if job.user.room
-        if job.user.room == msg.message.user.room
+      if job.room
+        if job.room == msg.message.user.room
           shownJobs.push job
       else if job.user.name == msg.message.user.name
         shownJobs.push job
