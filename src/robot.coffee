@@ -197,7 +197,7 @@ class Robot
     # will include exact matches
     for user in matchedUsers
       return [user] if user.name.toLowerCase() is lowerFuzzyName
-          
+
     matchedUsers
 
   usersForGroup: (group) ->
@@ -206,9 +206,23 @@ class Robot
     users = @users()
     for id, user of users
       for _, g of user['groups']
-        if g == group
+        if g.toLowerCase() == group.toLowerCase()
           matchedUsers.push user['name']
     matchedUsers
+
+  groups: () ->
+    groups = []
+    users = @users()
+    for _, user of users
+      for _, g of user['groups']
+        flag = false
+        for existGroup in groups
+          if g.toLowerCase() == existGroup.toLowerCase()
+            flag = true
+            break
+        if !flag
+          groups.push g
+    groups
 
   run: ->
     @adapter.run()
@@ -284,6 +298,10 @@ class Robot.Adapter
   # Public: Get all users in group
   usersForGroup: (group) ->
     @robot.usersForGroup group
+
+  # Public: Get all groups
+  groups: () ->
+    @robot.groups
 
   # Public: Creates a scoped http client with chainable methods for
   # modifying the request.  This doesn't actually make a request though.

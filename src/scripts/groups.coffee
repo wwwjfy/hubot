@@ -36,7 +36,7 @@ module.exports = (robot) ->
 
   robot.respond /([\w.\-_]+) is not in (["'\w:\-_]+)[.!]*$/i, (msg) ->
     name = msg.match[1]
-    newGroup = msg.match[2].trim()
+    newGroup = msg.match[2].trim().toLowerCase()
 
     if user = robot.userForName name
       user.groups = user.groups or [ ]
@@ -51,11 +51,5 @@ module.exports = (robot) ->
       msg.send "I don't know anything about #{name}."
 
   robot.respond /show groups/i, (msg) ->
-    groups = []
-    for id, user of robot.users()
-      if user.groups
-        for g in user.groups
-          if groups.indexOf(g) == -1
-            groups.push g
-
+    groups = robot.groups()
     msg.send "The groups are: " + groups.join(", ")
