@@ -231,6 +231,23 @@ class Robot
         return group
     return newGroup
 
+  getFuzzyGroupName: (groupName) ->
+    groups = @groups()
+    upperGroupNames = {}
+    console.info groups
+    for group in groups
+      if group.toLowerCase() == groupName.toLowerCase()
+        return group
+      uppers = ""
+      for char in group
+        if char.toUpperCase() == char
+          uppers += char
+      upperGroupNames[group] = uppers
+    for name, abbrev of upperGroupNames
+      if groupName.toLowerCase() == abbrev.toLowerCase()
+        return name
+    groupName
+
   run: ->
     @adapter.run()
 
@@ -313,6 +330,11 @@ class Robot.Adapter
   # Public: Check if newGroup is known
   getGroupName: (newGroup) ->
     @robot.getGroupName newGroup
+
+  # Public: the match is whole-word match, or upper-case-word match
+  # e.g. EGN can match ExampleGroupName
+  getFuzzyGroupName: (groupName) ->
+    @robot.getFuzzyGroupName groupName
 
   # Public: Creates a scoped http client with chainable methods for
   # modifying the request.  This doesn't actually make a request though.
