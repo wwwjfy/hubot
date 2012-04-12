@@ -2,29 +2,32 @@
 #
 # notify <group> bla bla - notify people in group anything
 # n <group> bla bla - notify people in group anything
-# notifychannel in #<channel> <group> bla bla - notify people in group anything
-# nc <group> in #<channel> bla bla - notify people in group anything
+
+matchFussyNames = (name, allUsers) ->
+  matched = []
+  for user in allUsers
+    if user.toLowerCase().lastIndexOf(name, 0) == 0
+      matched.push user
+  # no matching fallback
+  if matched.length == 0
+    matched.push name
+  matched
+
 
 module.exports = (robot) ->
   robot.respond /(notify|n) ([\w.\-_]+)\s*(.+)$/i, (msg) ->
     group = msg.match[2]
     notification = msg.match[3]
 
-    matchedUsers = robot.usersForGroup group
-
-    if matchedUsers.length > 0
-      msg.send matchedUsers.join(", ") + ": " + notification
-    else
+    groupUsers = robot.usersForGroup group
+    if groupUsers.length == 0
       msg.send msg.message.user.name + ": no such group"
+      return
 
-  robot.respond /(notifychannel|nc) in (#[\w.\-_]+)\s*([\w.\-_]+)\s*(.+)$/i, (msg) ->
-    channel = msg.match[2]
-    group = msg.match[3]
-    notification = msg.match[4]
+    activeUsers = robot.adapter.nicklist msg.message.user.room
+    matchedUsers = []
+    for name in groupUsers
+      for matchedName in matchFussyNames name, activeUsers
+        matchedUsers.push matchedName
 
-    matchedUsers = robot.usersForGroup group
-
-    if matchedUsers.length > 0
-      msg.sendToRoom channel, matchedUsers.join(", ") + ": " + msg.message.user.name + " asked you to " + notification
-    else
-      msg.send msg.message.user.name + ": no such group"
+    msg.send matchedUsers.join(", ") + ": " + notification
