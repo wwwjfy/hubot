@@ -224,6 +224,13 @@ class Robot
           groups.push g
     groups
 
+  getGroupName: (newGroup) ->
+    groups = @groups()
+    for group in groups
+      if newGroup.toLowerCase() == group.toLowerCase()
+        return group
+    return newGroup
+
   run: ->
     @adapter.run()
 
@@ -301,7 +308,11 @@ class Robot.Adapter
 
   # Public: Get all groups
   groups: () ->
-    @robot.groups
+    @robot.groups()
+
+  # Public: Check if newGroup is known
+  getGroupName: (newGroup) ->
+    @robot.getGroupName newGroup
 
   # Public: Creates a scoped http client with chainable methods for
   # modifying the request.  This doesn't actually make a request though.

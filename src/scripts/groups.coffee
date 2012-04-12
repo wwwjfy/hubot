@@ -23,6 +23,7 @@ module.exports = (robot) ->
     newGroup = msg.match[2].trim()
 
     unless newGroup.match(/^not\s+/i)
+      newGroup = robot.getGroupName newGroup
       if user = robot.userForName name
         user.groups = user.groups or [ ]
 
@@ -36,8 +37,9 @@ module.exports = (robot) ->
 
   robot.respond /([\w.\-_]+) is not in (["'\w:\-_]+)[.!]*$/i, (msg) ->
     name = msg.match[1]
-    newGroup = msg.match[2].trim().toLowerCase()
+    newGroup = msg.match[2].trim()
 
+    newGroup = robot.getGroupName newGroup
     if user = robot.userForName name
       user.groups = user.groups or [ ]
 
