@@ -19,6 +19,9 @@ module.exports = (robot) ->
     group = msg.match[2]
     notification = msg.match[3]
 
+    group = robot.getFuzzyGroupName group
+    console.info group
+
     groupUsers = robot.usersForGroup group
     if groupUsers.length == 0
       msg.send msg.message.user.name + ": no such group"
