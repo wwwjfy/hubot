@@ -8,6 +8,7 @@
 module.exports = (robot) ->
   robot.respond /who are in ([\w.\-_]+)\?*$/i, (msg) ->
     group = msg.match[1]
+    group = robot.getFuzzyGroupName group
 
     matchedUsers = robot.usersForGroup group
 

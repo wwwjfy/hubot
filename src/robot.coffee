@@ -234,7 +234,6 @@ class Robot
   getFuzzyGroupName: (groupName) ->
     groups = @groups()
     upperGroupNames = {}
-    console.info groups
     for group in groups
       if group.toLowerCase() == groupName.toLowerCase()
         return group
